@@ -1,0 +1,159 @@
+var background = createSprite(200, 200);
+background.setAnimation("landscape");
+
+var spritePlayer = createSprite(200, 350);
+  spritePlayer.setAnimation('player');
+  spritePlayer.width = 65;
+  spritePlayer.height = 65;
+
+var virus = createSprite(randomNumber(0,300),randomNumber(-800,-1200));
+virus.setAnimation('virus');
+virus.width = 33;
+virus.height = 33;
+
+var Scor = 0;
+
+var mentor = createSprite (randomNumber(0,300),randomNumber(-1600,-2000));
+mentor.setAnimation("mentor");
+mentor.width = 45;
+mentor.height = 45;
+
+var spriteLogo = createSprite(randomNumber(0,300),randomNumber(-300,-500));
+spriteLogo.setAnimation('point');
+spriteLogo.width = 33;
+spriteLogo.height = 33;
+var Logo = createSprite(randomNumber(0,300),randomNumber(-500,-700));
+Logo.setAnimation('point');
+Logo.width = 33;
+Logo.height = 33;
+
+var pasare1 = createSprite(randomNumber(-2000.0),randomNumber(50,200));
+pasare1.setAnimation('Cioara1');
+pasare1.width = 65;
+pasare1.height = 45;
+
+var balon = createSprite(randomNumber(-200.0),randomNumber(100,0));
+balon.setAnimation('Balon');
+balon.width = 65;
+balon.height = 45;
+
+var viata1 = createSprite(300, 50);
+viata1.setAnimation('viata1');
+viata1.width = 40;
+viata1.height = 40;
+
+var viata2 = createSprite(330, 50);
+viata2.setAnimation('viata1');
+viata2.width = 40;
+viata2.height = 40;
+
+var viata3 = createSprite(360, 50);
+viata3.setAnimation('viata1');
+viata3.width = 40;
+viata3.height = 40;
+
+var virusTouch = 0;
+
+function draw() {
+  // Movement
+  if (keyDown("a")) {
+    spritePlayer.x = spritePlayer.x - 4;
+  }
+  if (keyDown("d")) {
+    spritePlayer.x = spritePlayer.x + 4;
+  }
+  if (keyWentDown("w")) {
+   spritePlayer.y = 340;
+   spritePlayer.y = 330;
+   spritePlayer.y = 310;
+     spritePlayer.y = 290;
+    spritePlayer.y = 270;
+  }
+  //Interactions
+  if (spritePlayer.isTouching(spriteLogo)) {
+     spriteLogo.y=randomNumber(-200,-700);
+    spriteLogo.x = randomNumber(0,300);
+     Scor = Scor+1;
+  }
+
+  if (spritePlayer.isTouching(Logo)) {
+     Logo.y=randomNumber(-200,-700);
+    Logo.x = randomNumber(0,300);
+    Scor = Scor+1;
+  }
+  if (spritePlayer.isTouching(mentor)) {
+     mentor.y=randomNumber(-5000,-4000);
+    mentor.x = randomNumber(0,300);
+    Scor = Scor+10;
+  }
+  if (spritePlayer.x < 0) {
+    spritePlayer.x = 400;
+  }
+    if (spritePlayer.x > 400) {
+      spritePlayer.x = 0;
+    }
+   if (Logo.y>400) {
+      Logo.y=randomNumber(-200,-700);
+    Logo.x = randomNumber(0,300);
+    }
+     if (mentor.y>400) {
+      mentor.y=randomNumber(-5000,-3000);
+    mentor.x = randomNumber(0,300);
+    }
+      if (spriteLogo.y>400) {
+      spriteLogo.y=randomNumber(-200,-700);
+    spriteLogo.x = randomNumber(0,300);
+    }
+    if (virus.y>400) {
+      virus.y=randomNumber(-200,-700);
+    virus.x = randomNumber(0,300);
+    }
+  //Miscare virus+logo
+  if (spritePlayer.y < 350) {
+    spritePlayer.y +=3;
+  }
+   if (spritePlayer.y < 270) {
+    spritePlayer.y = 270;
+  }
+   if (spritePlayer.y > 350) {
+    spritePlayer.y =350 ;
+   }
+   pasare1.x += 5;
+   balon.x += 1;
+ virus.y +=7;
+ mentor.y +=12;
+Logo.y += 4;
+spriteLogo.y += 5;
+
+if (virus.isTouching(spritePlayer)) {
+  virus.y = randomNumber(-200,-700);
+  virus.x = randomNumber(0,300);
+  virusTouch += 1;
+}
+if (virusTouch == 1) {
+  viata3.setAnimation("viataLost");
+}
+if (virusTouch == 2) {
+  viata3.setAnimation("viataLost");
+  viata2.setAnimation("viataLost");
+}
+
+
+if (virusTouch > 2) {
+  var gameOver = createSprite(200, 200, 40, 100);
+  gameOver.setAnimation("over");
+}
+if (Scor > 40) {
+  var youWin = createSprite(200, 200, 200, 200);
+  youWin.setAnimation("youWin");
+  virusTouch = -50;
+  
+  }
+drawSprites();
+
+fill("black");
+textSize(20);
+text("Prezente:", 250, 30);
+text (Scor, 350, 30);
+}
+

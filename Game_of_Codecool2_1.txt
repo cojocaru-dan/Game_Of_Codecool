@@ -1,0 +1,182 @@
+var backgorundS = createSprite(200, 200);
+backgorundS.setAnimation("landscape");
+
+
+
+
+var spritePlayer = createSprite(200, 350);
+  spritePlayer.setAnimation('player');
+  spritePlayer.width = 65;
+  spritePlayer.height = 65;
+
+var virus = createSprite(randomNumber(0,300),randomNumber(-800,-1200));
+virus.setAnimation('virus');
+virus.width = 33;
+virus.height = 33;
+
+var Scor = 0;
+
+var mentor = createSprite (randomNumber(0,300),randomNumber(-1600,-2000));
+mentor.setAnimation("mentor");
+mentor.width = 45;
+mentor.height = 45;
+
+var spriteLogo = createSprite(randomNumber(0,300),randomNumber(-300,-500));
+spriteLogo.setAnimation('point');
+spriteLogo.width = 33;
+spriteLogo.height = 33;
+var Logo = createSprite(randomNumber(0,300),randomNumber(-500,-700));
+Logo.setAnimation('point');
+Logo.width = 33;
+Logo.height = 33;
+
+var pasare1 = createSprite(randomNumber(-2000.0),randomNumber(50,200));
+pasare1.setAnimation('Cioara1');
+pasare1.width = 65;
+pasare1.height = 45;
+
+var balon = createSprite(randomNumber(-200.0),randomNumber(100,0));
+balon.setAnimation('Balon');
+balon.width = 65;
+balon.height = 45;
+
+var viata1 = createSprite(300, 50);
+viata1.setAnimation('viata1');
+viata1.width = 30;
+viata1.height = 30;
+
+var viata2 = createSprite(330, 50);
+viata2.setAnimation('viata1');
+viata2.width = 30;
+viata2.height = 30;
+
+var viata3 = createSprite(360, 50);
+viata3.setAnimation('viata1');
+viata3.width = 30;
+viata3.height = 30;
+
+var virusTouch = 0;
+
+var boundary = createEdgeSprites();
+
+function draw() {
+  // Movement
+  gravity(spritePlayer);
+  
+  if(spritePlayer.isTouching(boundary)) {
+    spritePlayer.collide(boundary);
+  }
+  
+  movement(spritePlayer);
+  
+  //Interactions
+  if (spritePlayer.isTouching(spriteLogo)) {
+     spriteLogo.y=randomNumber(-200,-700);
+    spriteLogo.x = randomNumber(0,300);
+     Scor = Scor+1;
+     playSound("sound://category_collect/collect_item_bling_1.mp3", false);
+  }
+
+  if (spritePlayer.isTouching(Logo)) {
+     Logo.y=randomNumber(-200,-700);
+    Logo.x = randomNumber(0,300);
+    Scor = Scor+1;
+    playSound("sound://category_collect/collect_item_bling_1.mp3", false);
+  }
+  if (spritePlayer.isTouching(mentor)) {
+     mentor.y=randomNumber(-5000,-4000);
+    mentor.x = randomNumber(0,300);
+    Scor = Scor+10;
+    playSound("sound://category_collect/collect_item_bling_4.mp3", false);
+  }
+  if (spritePlayer.x < 0) {
+    spritePlayer.x = 400;
+  }
+    if (spritePlayer.x > 400) {
+      spritePlayer.x = 0;
+    }
+   if (Logo.y>400) {
+      Logo.y=randomNumber(-200,-700);
+    Logo.x = randomNumber(0,300);
+    }
+     if (mentor.y>400) {
+      mentor.y=randomNumber(-5000,-3000);
+    mentor.x = randomNumber(0,300);
+    }
+      if (spriteLogo.y>400) {
+      spriteLogo.y=randomNumber(-200,-700);
+    spriteLogo.x = randomNumber(0,300);
+    }
+    if (virus.y>400) {
+      virus.y=randomNumber(-200,-700);
+    virus.x = randomNumber(0,300);
+    }
+  //Miscare virus+logo
+  if (spritePlayer.y < 350) {
+    spritePlayer.y +=3;
+  }
+   if (spritePlayer.y < 270) {
+    spritePlayer.y = 270;
+  }
+   if (spritePlayer.y > 350) {
+    spritePlayer.y =350 ;
+   }
+   pasare1.x += 5;
+   balon.x += 1;
+ virus.y +=7;
+ mentor.y +=12;
+Logo.y += 4;
+spriteLogo.y += 5;
+
+if (virus.isTouching(spritePlayer)) {
+  virus.y = randomNumber(-200,-700);
+  virus.x = randomNumber(0,300);
+  virusTouch += 1;
+  playSound("sound://category_alerts/cartoon_negative_bling.mp3", false);
+}
+if (virusTouch == 1) {
+  viata3.setAnimation("viataLost");
+}
+if (virusTouch == 2) {
+  viata3.setAnimation("viataLost");
+  viata2.setAnimation("viataLost");
+}
+
+
+if (virusTouch > 2) {
+  var gameOver = createSprite(200, 200, 40, 100);
+  gameOver.setAnimation("over");
+  spritePlayer.destroy();
+  playSound("sound://category_male_voiceover/game_over_male.mp3", false);
+}
+if (Scor > 40) {
+  var youWin = createSprite(200, 200, 200, 200);
+  youWin.setAnimation("youWin");
+  virusTouch = -50;
+  spritePlayer.destroy();
+  playSound("sound://category_achievements/vibrant_game_achievement_4.mp3", false);
+  }
+drawSprites();
+
+fill("black");
+textSize(20);
+text("Prezente:", 250, 30);
+text (Scor, 350, 30);
+
+}
+function gravity(entity) {
+  if(entity.velocityY < 3) {
+    entity.velocityY += 0.5;
+  }
+}
+function movement(entity) {
+  if (keyDown("a")) {
+    entity.x -= 4;
+  }
+  if (keyDown("d")) {
+    entity.x += 4;
+  }
+  if (keyWentDown("w")) {
+   entity.velocityY = -10;
+  }
+}
